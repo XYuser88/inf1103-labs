@@ -1,8 +1,8 @@
 
-
+maxinventory=500
 inventory=0 #type int
 FailedReject=0
-
+FinalExceed=0
 while True:
     inventoryadd=input("Enter stock quantity:" )
     if inventoryadd == "quit":
