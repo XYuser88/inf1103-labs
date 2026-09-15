@@ -1,7 +1,7 @@
 
 maxinventory=500
 inventory=0 #type int
-FailedReject=0
+failedReject=0
 FinalExceed=0
 while True:
     inventoryadd=input("Enter stock quantity:" )
@@ -15,3 +15,10 @@ while True:
         inventoryadd=int(inventoryadd)
         inventory=inventory + inventoryadd
         print("Current total inventory:", inventory)
+
+    if inventory>maxinventory:
+        FinalExceed =inventory-maxinventory
+        print("Total units processed is:", inventory, " Inventory has exceeded maximum threshold by:",FinalExceed, " Number of entries failed or rejected:", failedReject)
+        break
+    else:
+        continue
