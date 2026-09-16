@@ -25,7 +25,7 @@ while True:
 
     if inventory>maxinventory:
         FinalExceed =inventory-maxinventory
-        print("Total units processed is:", inventory, " Inventory has exceeded maximum threshold by:",FinalExceed, " Number of entries failed or rejected:", failedReject)
+        print("Inventory has exceeded maximum threshold by:",FinalExceed)
         break
     else:
         continue
