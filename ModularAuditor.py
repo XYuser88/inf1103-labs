@@ -54,7 +54,7 @@ while True:
     else:
         inventory = process_delivery(inventory, new_value)
         tax = calculate_tax(new_value)
-        print(f'Current Inventory: {inventory}')
+        print("current inventory:", inventory)
         
     if exceed_threshold(inventory)==True:
         print("Inventory has exceeded maximum threshold of 500 units")
