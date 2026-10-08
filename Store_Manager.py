@@ -5,6 +5,7 @@ def load_inventory():
             inventory = json.load(file)
             print(inventory)
         print("inventory loaded.")
+        return inventory
             
     except FileNotFoundError: # only runs if error exists
         # insert new code to set inventory as 0 first
