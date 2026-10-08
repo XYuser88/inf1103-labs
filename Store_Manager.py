@@ -1,38 +1,36 @@
 import json
 def load_inventory():
-    global inventory,inventorylist
     try:
-        with open("inventory.txt","r") as file:
-            transaction = file.readlines()
-            inventory = int(transaction[0].split(": ")[1])
-
-            for transaction in transaction[2:]:
-                inventorylist.append(int(transaction))
+        with open("inventory.json","r") as file:
+            inventory = json.load(file)
             print(inventory)
+        print("inventory loaded.")
             
     except FileNotFoundError: # only runs if error exists
         # insert new code to set inventory as 0 first
-            inventory = 0
+            inventory = []
             print(inventory)
+            return inventory
 
-inventory=[
-     {"PID": "P001",
-      "Name":"Laptop",
-      "Price":1200,
-      "Stock":0},
 
-     {"PID": "P002",
-      "Name":"Mouse",
-      "Price":25.50,
-      "Stock":0},
+# inventory=[
+#      {"PID": "P001",
+#       "Name":"Laptop",
+#       "Price":1200,
+#       "Stock":0},
 
-     {"PID": "P003",
-      "Name":"Keybaord",
-      "Price":1200,
-      "Stock":0},
-]
+#      {"PID": "P002",
+#       "Name":"Mouse",
+#       "Price":25.50,
+#       "Stock":0},
 
-def display_all(inventory=inventory): #display all products
+#      {"PID": "P003",
+#       "Name":"Keybaord",
+#       "Price":1200,
+#       "Stock":0},
+# ]
+
+def display_all(inventory): #display all products
     print("Current Inventory")
     for product in inventory:
         print("ID:", product['PID'],"\nName:",product["Name"],
@@ -64,38 +62,37 @@ def get_stock():#get stock via input and check validity
     print("Stock must be positive integer.")
     return False
 
-def add_product(inventory=inventory): #add product to dictionary that is WITHIN a list, needs variable from an input function
+def add_product(inventory): #add product to dictionary that is WITHIN a list, needs variable from an input function
     prod_id=input("Enter product ID: ")
 
     if prod_id=="":
         print("product ID cannot be empty.")
         return
-   
     for product in inventory:#check if item exists
         if product ["PID"]==prod_id:
             print("this product already exists.")
             return
-        
-    name=input("Enter product Name: ")
-    if name=="":
-        print("Name cannot be empty.")
-        return
-    price=get_price()
-    stock=get_stock()
+    else:
+        name=input("Enter product Name: ")
+        if name=="":
+            print("Name cannot be empty.")
+            return
+        price=get_price()
+        stock=get_stock()
 
-    product={"PID": prod_id,
-      "Name":name,
-      "Price": price,
-      "Stock":stock}
-    inventory.append(product)
+        product={"PID": prod_id,
+        "Name":name,
+        "Price": price,
+        "Stock":stock}
+        inventory.append(product)
 
-def search_product(inventory=inventory,prod_id=inventory): #search for specific product in dictionary
+def search_product(inventory,prod_id): #search for specific product in dictionary
     for product in inventory:
         if product['PID']==prod_id:
             return product
     return None
 
-def update_stock(inventory=inventory): #update stock in dictionary
+def update_stock(inventory): #update stock in dictionary
     #ask product to update
     prod_id=input("Enter product ID: ")
 
@@ -122,17 +119,51 @@ def Saveinventoryfile(inventory):
         json.dump(inventory,file)
     print("inventory saved.")
 
+def menu():
+    print("\n ======MENU========")
+    print("1. Display All Products")
+    print("2. Add Product")
+    print("3. Update Stock")
+    print("4. Search Product")
+    print("5. Save Inventory")
+    print("6. Exit")
+    print("--------------------------")
+
+#main program
+inventory=load_inventory()
+while True:
+    menu()
+    option=input("Enter option: ")
+    if option=="1":
+        display_all(inventory)
+    elif option=="2":
+        add_product(inventory)
+    elif option=="3":
+        update_stock(inventory)
+    elif option=="4":
+        prod_id=input("Enter product ID you want to search: ")
+        product = search_product(inventory, prod_id)
+        if product is None:
+            print("Error: Product not found.")
+        else:
+            display_all([product])
+    elif option=="5":
+        Saveinventoryfile(inventory)
+    elif option=="6":
+        Saveinventoryfile(inventory)
+        print("Exiting program")
+        break
+    else:
+        print("Invalid option.")
+
+
+
+
 # print(inventory)
 # add_product()
 # print("==========================")
-# print(inventory)
-# product_id=input("Enter product ID you want to search: ")
-# product = search_product(inventory, product_id)
-# if product is None:
-#     print("Error: Product not found.")
-# else:
-#     display_all([product])
+
 # print("==========================")
-print(inventory)
-update_stock()
-print(inventory)
+# print(inventory)
+# update_stock()
+# print(inventory)
