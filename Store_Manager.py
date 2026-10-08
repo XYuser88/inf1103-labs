@@ -149,8 +149,11 @@ while True:
             display_all([product])
     elif option=="5":
         Saveinventoryfile(inventory)
+        print(inventory)
+        print("Inventory saved.")
     elif option=="6":
         Saveinventoryfile(inventory)
+        print(inventory)
         print("Exiting program")
         break
     else:
