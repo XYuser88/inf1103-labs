@@ -54,6 +54,9 @@ def get_price():#get price via input and check validity
 def get_stock():#get stock via input and check validity
     stock_string=input("Enter stock amount: ")
 
+    if stock_string=="":
+        print("Enter valid stock.")
+        return
     if stock_string.isdigit():
         stock_string=int(stock_string)
         if stock_string>0:
@@ -104,6 +107,16 @@ def update_stock(inventory=inventory): #update stock in dictionary
      print("Product not found.")
      return
 
+    #show current stock
+    print("Product: ", product["Name"])
+    print("Current stock", product["Stock"])
+
+    newStock=get_stock()
+
+    product["Stock"]=newStock
+    print("Stock successfully updated")
+
+
 def Saveinventoryfile(inventory):
     with open("inventory.json", 'w') as file:
         json.dump(inventory,file)
@@ -112,10 +125,14 @@ def Saveinventoryfile(inventory):
 # print(inventory)
 # add_product()
 # print("==========================")
+# print(inventory)
+# product_id=input("Enter product ID you want to search: ")
+# product = search_product(inventory, product_id)
+# if product is None:
+#     print("Error: Product not found.")
+# else:
+#     display_all([product])
+# print("==========================")
 print(inventory)
-product_id=input("Enter product ID you want to search: ")
-product = search_product(inventory, product_id)
-if product is None:
-    print("Error: Product not found.")
-else:
-    display_all([product])
+update_stock()
+print(inventory)
