@@ -22,7 +22,7 @@ class Product:
 
     #display information for one product
     def display_information(self):
-        print("Product ID: ", self.__pid)
+        print("\nProduct ID: ", self.__pid)
         print("Product Name: ", self.__name)
         print("Product Price: ", self.__price)
         print("Product Stock: ", self.__stock)
@@ -143,7 +143,7 @@ def product_input(inventory):
     if product is not None:
         print("product already exists. ")
         return
-    name = input("enter product name")
+    name = input("enter product name: ")
     if name=="":
         print("Name cannot be empty.")
         return
@@ -151,7 +151,6 @@ def product_input(inventory):
     price=get_price()
     stock=get_stock()
 
-    #for testing
     if price is None or stock is None:
         return
 
@@ -161,10 +160,63 @@ def product_input(inventory):
     print("Product successfully added.")
 
 
-inv = Inventory()
+def update_stock(inventory):
+    pid= input("enter product ID:")
+    product= inventory.search_product(pid)
 
-p1 = Product("P003", "Keyboard", 80, 5)
-inv.add_product(p1)
+    if product == None:
+        print("product not found")
+        return
+    else:
+        product.display_information()
 
-save_inventory(inv)
+    new_stock=get_stock()
+    if new_stock==None:
+        return
+    else:
+        product.update_stock(new_stock)
+
+    
+
+
+def menu():
+    print("\n====== MENU ======")
+    print("1. Display All Products")
+    print("2. Add Product")
+    print("3. Update Stock")
+    print("4. Search Product")
+    print("5. Save Inventory")
+    print("6. Exit")
+    print("--------------------------")
+
+#main program
+
+inventory= load_inventory()
+while True:
+    menu()
+    option=input("Enter option: ")
+    if option=="1":
+        inventory.display_all()
+    elif option=="2":
+        product_input(inventory)
+    elif option=="3":
+        update_stock(inventory)
+    elif option=="4":
+        pid=input("Enter product ID you want to search: ")
+        product = inventory.search_product(pid)
+        if product is None:
+            print("Error: Product not found.")
+        else:
+            product.display_information()
+    elif option=="5":
+        save_inventory(inventory)
+        print("Inventory saved.")
+    elif option=="6":
+        save_inventory(inventory)
+        inventory.display_all()
+        print("Exiting program")
+        break
+    else:
+        print("Invalid option.")
+
  
