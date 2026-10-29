@@ -1,6 +1,7 @@
+import json
 ## PRODUCT CLASS ##
 
-class product:
+class Product:
     def __init__(self,pid,name, price, stock):
         self.__pid = pid
         self.__name = name
@@ -17,18 +18,18 @@ class product:
 
     #get id of certain product
     def getID(self,pid):
-        return self.productID == pid
+        return self.__pid == pid
 
     #display information for one product
     def display_information(self):
-        print("Product ID: ", self.__productID)
+        print("Product ID: ", self.__pid)
         print("Product Name: ", self.__name)
         print("Product Price: ", self.__price)
         print("Product Stock: ", self.__stock)
 
     def append_Dict(self):
         return {
-            "PID":self.__productID,
+            "PID":self.__pid,
             "Name": self.__name,
             "Price": self.__price,
             "Stock": self.__stock
@@ -37,7 +38,7 @@ class product:
 
 ##INVENTORY CLASS##
 
-class inventory:
+class Inventory:
 
     def __init__(self):
         self.products=[]
@@ -64,3 +65,40 @@ class inventory:
 
 #file loading and saving
 def load_inventory():
+    inventory = Inventory()
+
+    try:
+        with open("inventory.json", "r") as file:
+            data = json.load(file)
+
+        for item in data:
+            product = Product(
+                item["PID"],
+                item["Name"],
+                item["Price"],
+                item["Stock"]
+            )
+            inventory.add_product(product)
+
+        print("Inventory loaded.")
+
+    except FileNotFoundError:
+        print("initialising empty inventory")
+    return inventory
+
+def save_inventory(inventory):
+    data=[]
+
+    for product in inventory.products:
+        data.append(product.to_dictionary())
+
+    with open("inventory.json", "w") as file:
+        json.dump(data, file)
+
+    print("Inventory is saved.")
+
+
+#input validation
+
+def get_price():
+    price = input("Enter Product Price: ")
