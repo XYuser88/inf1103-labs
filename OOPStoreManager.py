@@ -90,7 +90,7 @@ def save_inventory(inventory):
     data=[]
 
     for product in inventory.products:
-        data.append(product.to_dictionary())
+        data.append(product.append_Dict())
 
     with open("inventory.json", "w") as file:
         json.dump(data, file)
@@ -100,5 +100,71 @@ def save_inventory(inventory):
 
 #input validation
 
-def get_price():
-    price = input("Enter Product Price: ")
+def get_price():#get price via input and check validity
+    price=input("Enter Product Price: ")
+    
+    if price=="":
+        print("type the PRICE.")
+        return
+    try:
+        price = float(price)
+
+        if price < 0:
+            print("price cannot be negative")
+            return None
+
+        return price
+
+    except ValueError:
+        print("Enter either float or integer.")
+        return None
+
+def get_stock():#get stock via input and check validity
+    stock_string=input("Enter stock amount: ")
+
+    if stock_string=="":
+        print("Enter valid stock.")
+        return
+    if stock_string.isdigit():
+        stock_string=int(stock_string)
+        if stock_string>0:
+            return stock_string
+    print("Stock must be positive integer.")
+    return None
+
+def product_input(inventory):
+    pid = input("Enter product ID: ")
+    if pid == "":
+        print("product ID cannot be empty.")
+        return
+
+    product=inventory.search_product(pid)
+
+    if product is not None:
+        print("product already exists. ")
+        return
+    name = input("enter product name")
+    if name=="":
+        print("Name cannot be empty.")
+        return
+    
+    price=get_price()
+    stock=get_stock()
+
+    #for testing
+    if price is None or stock is None:
+        return
+
+    product = Product(pid, name, price, stock)
+    inventory.add_product(product)
+
+    print("Product successfully added.")
+
+
+inv = Inventory()
+
+p1 = Product("P003", "Keyboard", 80, 5)
+inv.add_product(p1)
+
+save_inventory(inv)
+ 
