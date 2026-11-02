@@ -43,9 +43,20 @@ class physicalproduct(Product):
         super().__init__(pid, name, price, stock)
         self.weight = weight
 
-    def display_informtion(self):
+    def display_information(self):
         super().display_information()
         print("Product Weight: ", self.weight, "kg")
+
+#digital product class inheriting from Product class##
+
+class digitalproduct(Product):
+    def __init__(self, pid, name, price, stock, digitalSize):
+        super().__init__(pid, name, price, stock)
+        self.digitalSize = digitalSize
+
+    def display_information(self):
+        super().display_information()
+        print("Download Size:", self.digitalSize, "MB")
 
 
 ##INVENTORY CLASS##
@@ -231,4 +242,11 @@ while True:
     else:
         print("Invalid option.")
 
- 
+
+
+
+inventory = load_inventory()
+test_product = physicalproduct("P001", "Laptop", 1200, 10, 2.5)
+test_product.display_information()
+test = digitalproduct("D001", "Antivirus", 50, 10, 500)
+test.display_information()
