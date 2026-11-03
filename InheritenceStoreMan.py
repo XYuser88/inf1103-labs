@@ -1,7 +1,8 @@
 import json
+from abc import ABC, abstractmethod
 ## PRODUCT CLASS ##
 
-class Product:
+class Product(ABC):
     def __init__(self,pid,name, price, stock):
         self.__pid = pid
         self.__name = name
@@ -34,6 +35,14 @@ class Product:
             "Price": self.__price,
             "Stock": self.__stock
         }
+    
+    @abstractmethod #every child of product class must have this method
+    def get_shipping_info(self):
+        pass
+    
+class shippingValid(ABC):
+    def shippingValid(self):
+        pass
 
 
 #Physical product class inheriting from Product class##
@@ -47,16 +56,31 @@ class physicalproduct(Product):
         super().display_information()
         print("Product Weight: ", self.weight, "kg")
 
+    def get_shipping_info(self):
+        return "Requires physical shipping."
+
+    def shippingCost(self):
+        return self.weight * 5
+    
+    def append_Dict(self):
+        data = super().append_Dict()
+        data["Type"] = "physical"
+        data["Weight"] = self.weight
+        return data
+
 #digital product class inheriting from Product class##
 
 class digitalproduct(Product):
-    def __init__(self, pid, name, price, stock, digitalSize):
+    def __init__(self, pid, name, price, stock, download_size):
         super().__init__(pid, name, price, stock)
-        self.digitalSize = digitalSize
+        self.download_size = download_size
 
     def display_information(self):
         super().display_information()
-        print("Download Size:", self.digitalSize, "MB")
+        print("Download Size:", self.download_size, "MB")
+
+    def get_shipping_info(self):
+        return "This will be delivered digitally."
 
 
 ##INVENTORY CLASS##
