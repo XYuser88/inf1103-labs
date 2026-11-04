@@ -71,7 +71,7 @@ class physicalproduct(Product, CanBeShipped):
 
 #digital product class inheriting from Product class##
 
-class digitalproduct(Product, CanBeShipped):
+class digitalproduct(Product):
     def __init__(self, pid, name, price, stock, download_size):
         super().__init__(pid, name, price, stock)
         self.download_size = download_size
@@ -126,31 +126,48 @@ def load_inventory():
             data = json.load(file)
 
         for item in data:
-            product = Product(
-                item["PID"],
-                item["Name"],
-                item["Price"],
-                item["Stock"]
-            )
+            if item.get("Type") == "physical":
+                product = physicalproduct(
+                    item["PID"],
+                    item["Name"],
+                    item["Price"],
+                    item["Stock"],
+                    item["Weight"]
+                )
+
+            elif item.get("Type") == "digital":
+                product = digitalproduct(
+                    item["PID"],
+                    item["Name"],
+                    item["Price"],
+                    item["Stock"],
+                    item["Download_Size"]
+                )
+
+            else:
+                print("Skipping unknown product type.")
+                continue
+
             inventory.add_product(product)
 
         print("Inventory loaded.")
 
     except FileNotFoundError:
-        print("initialising empty inventory")
+        print("Initialising empty inventory.")
+
     return inventory
 
+
 def save_inventory(inventory):
-    data=[]
+    data = []
 
     for product in inventory.products:
         data.append(product.append_Dict())
 
     with open("inventory.json", "w") as file:
-        json.dump(data, file)
+        json.dump(data, file, indent=4)
 
     print("Inventory is saved.")
-
 
 #input validation
 
@@ -181,7 +198,7 @@ def get_stock():#get stock via input and check validity
         return
     if stock_string.isdigit():
         stock_string=int(stock_string)
-        if stock_string>0:
+        if stock_string>=0:
             return stock_string
     print("Stock must be positive integer.")
     return None
@@ -208,7 +225,34 @@ def product_input(inventory):
     if price is None or stock is None:
         return
 
-    product = Product(pid, name, price, stock)
+    product_type = input("Physical or Digital? (p/d): ")
+
+    if product_type == "p":
+        try:
+            weight = float(input("Enter weight (kg): "))
+        except ValueError:
+            print("Weight must be a number.")
+            return
+        
+        if weight < 0:
+            print("weight cannot be negative")
+            return
+        product = physicalproduct(pid, name, price, stock, weight)
+    elif product_type == "d":
+        try:
+            download_size = float(input("Enter download size (MB): "))
+        except ValueError:
+            print("Download size must be a number.")
+        return
+        if download_size < 0:
+            print("Download size cannot be negative.")
+            return
+        product = digitalproduct(pid, name, price, stock, download_size)
+
+    else:
+        print("Invalid product type.")
+        return
+    
     inventory.add_product(product)
 
     print("Product successfully added.")
@@ -275,9 +319,3 @@ while True:
 
 
 
-
-inventory = load_inventory()
-test_product = physicalproduct("P001", "Laptop", 1200, 10, 2.5)
-test_product.display_information()
-test = digitalproduct("D001", "Antivirus", 50, 10, 500)
-test.display_information()
