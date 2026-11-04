@@ -36,18 +36,19 @@ class Product(ABC):
             "Stock": self.__stock
         }
     
-    @abstractmethod #every child of product class must have this method
-    def get_shipping_info(self):
+    @abstractmethod
+    def get_fulfilment_info(self):
         pass
     
-class shippingValid(ABC):
-    def shippingValid(self):
+class CanBeShipped(ABC):
+    @abstractmethod
+    def calculate_shipping_cost(self):
         pass
 
 
 #Physical product class inheriting from Product class##
 
-class physicalproduct(Product):
+class physicalproduct(Product, CanBeShipped):
     def __init__(self, pid, name, price, stock, weight):
         super().__init__(pid, name, price, stock)
         self.weight = weight
@@ -56,10 +57,10 @@ class physicalproduct(Product):
         super().display_information()
         print("Product Weight: ", self.weight, "kg")
 
-    def get_shipping_info(self):
+    def get_fulfilment_info(self):
         return "Requires physical shipping."
 
-    def shippingCost(self):
+    def calculate_shipping_cost(self):
         return self.weight * 5
     
     def append_Dict(self):
@@ -70,7 +71,7 @@ class physicalproduct(Product):
 
 #digital product class inheriting from Product class##
 
-class digitalproduct(Product):
+class digitalproduct(Product, CanBeShipped):
     def __init__(self, pid, name, price, stock, download_size):
         super().__init__(pid, name, price, stock)
         self.download_size = download_size
@@ -79,8 +80,14 @@ class digitalproduct(Product):
         super().display_information()
         print("Download Size:", self.download_size, "MB")
 
-    def get_shipping_info(self):
+    def get_fulfilment_info(self):
         return "This will be delivered digitally."
+    
+    def append_Dict(self):
+        data = super().append_Dict()
+        data["Type"] = "digital"
+        data["Download_Size"] = self.download_size
+        return data
 
 
 ##INVENTORY CLASS##
