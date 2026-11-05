@@ -1,0 +1,10 @@
+[
+    {
+        "PID": "P002",
+        "Name": "laptop",
+        "Price": 400.0,
+        "Stock": 4,
+        "Type": "physical",
+        "Weight": 9.0
+    }
+]

@@ -1,0 +1,19 @@
+# Old lab files
+*.zip
+*.docx
+auditor.py
+git.log
+
+# Unused test folder
+prog test logic_manager/
+
+# Python temporary files
+__pycache__/
+*.py[cod]
+
+# Virtual environments and settings
+.venv/
+venv/
+.env
+.vscode/
+.idea/

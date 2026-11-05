@@ -1,5 +1,0 @@
-Inventory: 70
-inventory list: 
-10
-20
-40

@@ -243,7 +243,7 @@ def product_input(inventory):
             download_size = float(input("Enter download size (MB): "))
         except ValueError:
             print("Download size must be a number.")
-        return
+            return
         if download_size < 0:
             print("Download size cannot be negative.")
             return
@@ -316,6 +316,5 @@ while True:
         break
     else:
         print("Invalid option.")
-
 
 
