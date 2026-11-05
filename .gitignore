@@ -2,7 +2,6 @@
 *.zip
 *.docx
 auditor.py
-git.log
 
 # Unused test folder
 prog test logic_manager/
