@@ -1,6 +1,9 @@
 import json
 from product import Product, physicalproduct, digitalproduct
 from inventory import Inventory
+from supplier import Supplier
+
+supplier1 = Supplier("S001", "123 Supplies", "123@gmail.com")
 
 
 #file loading and saving
@@ -18,7 +21,8 @@ def load_inventory():
                     item["Name"],
                     item["Price"],
                     item["Stock"],
-                    item["Weight"]
+                    item["Weight"],
+                    supplier1
                 )
 
             elif item.get("Type") == "digital":
@@ -27,7 +31,8 @@ def load_inventory():
                     item["Name"],
                     item["Price"],
                     item["Stock"],
-                    item["Download_Size"]
+                    item["Download_Size"],
+                    supplier1
                 )
 
             else:
@@ -123,7 +128,7 @@ def product_input(inventory):
         if weight < 0:
             print("weight cannot be negative")
             return
-        product = physicalproduct(pid, name, price, stock, weight)
+        product = physicalproduct(pid, name, price, stock, weight, supplier1)
     elif product_type == "d":
         try:
             download_size = float(input("Enter download size (MB): "))
@@ -133,7 +138,7 @@ def product_input(inventory):
         if download_size < 0:
             print("Download size cannot be negative.")
             return
-        product = digitalproduct(pid, name, price, stock, download_size)
+        product = digitalproduct(pid, name, price, stock, download_size,supplier1)
 
     else:
         print("Invalid product type.")

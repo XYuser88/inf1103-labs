@@ -1,13 +1,15 @@
 from abc import ABC, abstractmethod
+from supplier import Supplier
 
 ## PRODUCT CLASS ##
 
 class Product(ABC):
-    def __init__(self,pid,name, price, stock):
+    def __init__(self,pid,name, price, stock, supplier: Supplier):
         self.__pid = pid
         self.__name = name
         self.__price = price
         self.__stock = stock
+        self.supplier = supplier
 
     #update stock of certain product
     def update_stock(self, new_stock):
@@ -27,6 +29,7 @@ class Product(ABC):
         print("Product Name: ", self.__name)
         print("Product Price: ", self.__price)
         print("Product Stock: ", self.__stock)
+        self.supplier.display_information()
 
     def append_Dict(self):
         return {
@@ -49,8 +52,8 @@ class CanBeShipped(ABC):
 #Physical product class inheriting from Product class##
 
 class physicalproduct(Product, CanBeShipped):
-    def __init__(self, pid, name, price, stock, weight):
-        super().__init__(pid, name, price, stock)
+    def __init__(self, pid, name, price, stock, weight, supplier: Supplier):
+        super().__init__(pid, name, price, stock, supplier)
         self.weight = weight
 
     def display_information(self):
@@ -72,8 +75,8 @@ class physicalproduct(Product, CanBeShipped):
 #digital product class inheriting from Product class##
 
 class digitalproduct(Product):
-    def __init__(self, pid, name, price, stock, download_size):
-        super().__init__(pid, name, price, stock)
+    def __init__(self, pid, name, price, stock, download_size,supplier: Supplier):
+        super().__init__(pid, name, price, stock, supplier)
         self.download_size = download_size
 
     def display_information(self):
@@ -88,3 +91,5 @@ class digitalproduct(Product):
         data["Type"] = "digital"
         data["Download_Size"] = self.download_size
         return data
+    
+
