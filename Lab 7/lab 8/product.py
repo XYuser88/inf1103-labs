@@ -60,21 +60,22 @@ class CanBeShipped(ABC):
 #Physical product class inheriting from Product class##
 
 class physicalproduct(Product, CanBeShipped):
-    def __init__(self, pid, name, price, stock, weight, supplier: Supplier):
+    def __init__(self, pid: str, name: str, price: float,
+                 stock: int, weight: float, supplier: Supplier) -> None:
         super().__init__(pid, name, price, stock, supplier)
-        self.weight = weight
+        self.weight: float = weight
 
-    def display_information(self):
+    def display_information(self) -> None:
         super().display_information()
         print("Product Weight: ", self.weight, "kg")
 
-    def get_fulfilment_info(self):
+    def get_fulfilment_info(self) -> str:
         return "Requires physical shipping."
 
-    def calculate_shipping_cost(self):
+    def calculate_shipping_cost(self) -> float:
         return self.weight * 5
-    
-    def append_Dict(self):
+
+    def append_Dict(self) -> dict[str, str | int | float]:
         data = super().append_Dict()
         data["Type"] = "physical"
         data["Weight"] = self.weight
@@ -82,22 +83,22 @@ class physicalproduct(Product, CanBeShipped):
 
 #digital product class inheriting from Product class##
 
-class digitalproduct(Product):
-    def __init__(self, pid, name, price, stock, download_size,supplier: Supplier):
-        super().__init__(pid, name, price, stock, supplier)
-        self.download_size = download_size
 
-    def display_information(self):
+class digitalproduct(Product):
+    def __init__(self, pid: str, name: str, price: float,
+                 stock: int, download_size: float, supplier: Supplier) -> None:
+        super().__init__(pid, name, price, stock, supplier)
+        self.download_size: float = download_size
+
+    def display_information(self) -> None:
         super().display_information()
         print("Download Size:", self.download_size, "MB")
 
-    def get_fulfilment_info(self):
+    def get_fulfilment_info(self) -> str:
         return "This will be delivered digitally."
-    
-    def append_Dict(self):
+
+    def append_Dict(self) -> dict[str, str | int | float]:
         data = super().append_Dict()
         data["Type"] = "digital"
         data["Download_Size"] = self.download_size
         return data
-    
-
