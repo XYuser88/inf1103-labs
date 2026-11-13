@@ -6,9 +6,9 @@ class Inventory:
         self.products:list[Product] = []
 
     #add products to the list
-    def add_product(self,product):
+    def add_product(self, product: Product) -> None:
         self.products.append(product)
-    def remove_product(self, product_id: str):
+    def remove_product(self, product_id: str) -> bool:
         for product in self.products:
             if product.getID(product_id):
                 self.products.remove(product)
@@ -17,11 +17,11 @@ class Inventory:
         return False
 
     #search for a product
-    def search_product(self, pid):
+    def search_product(self, pid: str) -> Product | None:
         for product in self.products:
             if product.getID(pid):
                 return product
-
+    
         return None
 
     def display_all(self):
@@ -34,11 +34,10 @@ class Inventory:
 
 
 
-def find_product(self, product_id: str) -> Product | None:
-    for product in self.products:
-        if product.getID(product_id):
-            return product
-
-    return None
+    def find_product(self, product_id: str) -> Product | None:
+        for product in self.products:
+            if product.getID(product_id):
+                return product
+        return None
 
 
