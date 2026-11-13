@@ -3,10 +3,12 @@ from product import Product, physicalproduct, digitalproduct
 from inventory import Inventory
 from supplier import Supplier
 
-supplier1 = Supplier("S001", "123 Supplies", "123@gmail.com")
+
 
 
 #file loading and saving
+
+
 def load_inventory():
     inventory = Inventory()
 
@@ -15,6 +17,14 @@ def load_inventory():
             data = json.load(file)
 
         for item in data:
+            supplier_data = item["Supplier"]
+
+            supplier = Supplier(
+                supplier_data["supplier_id"],
+                supplier_data["name"],
+                supplier_data["contact_email"]
+            )
+
             if item.get("Type") == "physical":
                 product = physicalproduct(
                     item["PID"],
@@ -22,7 +32,7 @@ def load_inventory():
                     item["Price"],
                     item["Stock"],
                     item["Weight"],
-                    supplier1
+                    supplier
                 )
 
             elif item.get("Type") == "digital":
@@ -32,7 +42,7 @@ def load_inventory():
                     item["Price"],
                     item["Stock"],
                     item["Download_Size"],
-                    supplier1
+                    supplier
                 )
 
             else:
@@ -47,6 +57,8 @@ def load_inventory():
         print("Initialising empty inventory.")
 
     return inventory
+
+
 
 
 def save_inventory(inventory):
@@ -94,59 +106,79 @@ def get_stock():#get stock via input and check validity
     print("Stock must be positive integer.")
     return None
 
-def product_input(inventory):
-    pid = input("Enter product ID: ")
-    if pid == "":
-        print("product ID cannot be empty.")
+
+def product_input(inventory: Inventory) -> None:
+    print("\nAdd Inventory")
+
+    pid = input("Enter Product ID: ").strip()
+    if not pid:
+        print("Product ID cannot be empty.")
         return
 
-    product=inventory.search_product(pid)
-
-    if product is not None:
-        print("product already exists. ")
+    if inventory.search_product(pid) is not None:
+        print("Product already exists.")
         return
-    name = input("enter product name: ")
-    if name=="":
+
+    name = input("Enter Product Name: ").strip()
+    if not name:
         print("Name cannot be empty.")
         return
-    
-    price=get_price()
-    stock=get_stock()
 
-    if price is None or stock is None:
+    price = get_price()
+    if price is None:
         return
 
-    product_type = input("Physical or Digital? (p/d): ")
+    stock = get_stock()
+    if stock is None:
+        return
 
-    if product_type == "p":
-        try:
-            weight = float(input("Enter weight (kg): "))
-        except ValueError:
-            print("Weight must be a number.")
-            return
-        
-        if weight < 0:
-            print("weight cannot be negative")
-            return
-        product = physicalproduct(pid, name, price, stock, weight, supplier1)
-    elif product_type == "d":
-        try:
-            download_size = float(input("Enter download size (MB): "))
-        except ValueError:
-            print("Download size must be a number.")
-            return
-        if download_size < 0:
-            print("Download size cannot be negative.")
-            return
-        product = digitalproduct(pid, name, price, stock, download_size,supplier1)
+    product_type = input("Type (1 = Physical, 2 = Digital): ").strip()
 
-    else:
+
+    supplier_id = input("Enter Supplier ID: ")
+    supplier_name = input("Enter Supplier Name: ")
+    supplier_email = input("Enter Supplier Email: ")
+
+    if not supplier_id.strip() or not supplier_name.strip() or not supplier_email.strip():
+        print("Supplier information cannot be empty.")
+        return
+
+    supplier = Supplier(supplier_id, supplier_name, supplier_email)
+
+
+
+    
+
+    if product_type not in ("1", "2"):
         print("Invalid product type.")
         return
-    
-    inventory.add_product(product)
 
-    print("Product successfully added.")
+    try:
+        if product_type == "1":
+            weight = float(input("Enter weight (kg): "))
+
+            if weight < 0:
+                print("Weight cannot be negative.")
+                return
+
+            product = physicalproduct(pid, name, price, stock, weight, supplier)
+
+        else:
+            download_size = float(input("Enter download size (MB): "))
+
+            if download_size < 0:
+                print("Download size cannot be negative.")
+                return
+
+            product = digitalproduct(pid, name, price, stock, download_size, supplier)
+
+    except ValueError:
+        print("Enter a valid number.")
+        return
+
+    inventory.add_product(product)
+    print("\nProduct Added Successfully!")
+
 
 
 def update_stock(inventory):

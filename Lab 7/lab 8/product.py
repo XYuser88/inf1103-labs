@@ -39,25 +39,29 @@ class Product(ABC):
         print("Product Stock: ", self.__stock)
         self.supplier.display_information()
 
-    def append_Dict(self) -> dict[str, str | int | float]:
+    def append_Dict(self) -> dict[str, str | int | float | dict[str, str]]:
         return {
-            "PID":self.__pid,
-            "Name": self.__name,
-            "Price": self.__price,
-            "Stock": self.__stock
+        "PID": self.__pid,
+        "Name": self.__name,
+        "Price": self.__price,
+        "Stock": self.__stock,
+        "Supplier": {
+            "supplier_id": self.supplier.supplier_id,
+            "name": self.supplier.name,
+            "contact_email": self.supplier.contact_email
         }
-    
+    }
+
     @abstractmethod
     def get_fulfilment_info(self) -> str:
         pass
-    
+
+#Physical product class inheriting from Product class##
+
 class CanBeShipped(ABC):
     @abstractmethod
     def calculate_shipping_cost(self) -> float:
         pass
-
-
-#Physical product class inheriting from Product class##
 
 class physicalproduct(Product, CanBeShipped):
     def __init__(self, pid: str, name: str, price: float,
@@ -75,7 +79,7 @@ class physicalproduct(Product, CanBeShipped):
     def calculate_shipping_cost(self) -> float:
         return self.weight * 5
 
-    def append_Dict(self) -> dict[str, str | int | float]:
+    def append_Dict(self) -> dict[str, str | int | float | dict[str, str]]:
         data = super().append_Dict()
         data["Type"] = "physical"
         data["Weight"] = self.weight
@@ -97,7 +101,7 @@ class digitalproduct(Product):
     def get_fulfilment_info(self) -> str:
         return "This will be delivered digitally."
 
-    def append_Dict(self) -> dict[str, str | int | float]:
+    def append_Dict(self) -> dict[str, str | int | float | dict[str, str]]:
         data = super().append_Dict()
         data["Type"] = "digital"
         data["Download_Size"] = self.download_size
