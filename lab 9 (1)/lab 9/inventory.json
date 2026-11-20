@@ -1,0 +1,15 @@
+[
+    {
+        "PID": "P001",
+        "Name": "laptop",
+        "Price": 1000.0,
+        "Stock": 2,
+        "Supplier": {
+            "supplier_id": "AB",
+            "name": "ABsupplies",
+            "contact_email": "ABsupplies@gmail.com"
+        },
+        "Type": "physical",
+        "Weight": 7.0
+    }
+]
