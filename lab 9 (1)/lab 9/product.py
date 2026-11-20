@@ -1,10 +1,19 @@
+import math 
 from abc import ABC, abstractmethod
 from supplier import Supplier
 
 ## PRODUCT CLASS ##
 
 class Product(ABC):
-    def __init__(self,pid: str,name: str,price: float,stock: int,supplier: Supplier) -> None:
+    def __init__(self, pid: str, name: str, price: float,
+                 stock: int, supplier: Supplier) -> None:
+
+        if not math.isfinite(price) or price <= 0:
+            raise ValueError("Price must be greater than zero.")
+
+        if type(stock) is not int or stock < 0:
+            raise ValueError("Stock must be a non-negative integer.")
+
         self.__pid = pid
         self.__name = name
         self.__price = price
@@ -13,11 +22,12 @@ class Product(ABC):
 
     #update stock of certain product
     def update_stock(self, new_stock: int) -> None:
-        if isinstance(new_stock, int) and new_stock >= 0:
-            self.__stock = new_stock
-            print("Stock successfully updated.")
-        else:
-            print("Stock must be a non-negative integer.")
+
+        if type(new_stock) is not int or new_stock < 0:
+            raise ValueError("Stock must be a non-negative integer.")
+
+        self.__stock = new_stock
+        print("Stock successfully updated.")
 
 
     # Get ID of certain product
